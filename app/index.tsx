@@ -7,8 +7,8 @@ import {
   TextInput,
   View,
 } from 'react-native';
-import BottomSheet, { type BottomSheetRef } from '../components/BottomSheet';
 import { ScrollView } from 'react-native-gesture-handler';
+import BottomSheet, { type BottomSheetRef } from '../components/BottomSheet';
 
 export default function App() {
   const sheetRef = useRef<BottomSheetRef>(null);
@@ -17,14 +17,21 @@ export default function App() {
   return (
     <View style={styles.screen}>
 
-      <Text style={styles.welcome}>Welcome</Text>
+      <View style={styles.avatar}>
+        <Text style={styles.avatarText}>👋</Text>
+      </View>
+
+      <Text style={styles.welcome}>Welcome back!</Text>
+      <Text style={styles.subtitle}>Start a new project or pick up where you left off.</Text>
 
       <Pressable
         style={styles.openBtn}
         onPress={() => sheetRef.current?.open()}
       >
-        <Text style={styles.openBtnText}>Open</Text>
+        <Text style={styles.openBtnText}>New Project</Text>
       </Pressable>
+
+      <Text style={styles.hint}>Tap above to get started</Text>
 
 
       <BottomSheet ref={sheetRef} snapPoint={0.5}>
@@ -57,10 +64,10 @@ export default function App() {
           </View>
 
           <View style={styles.card}>
-            <Text style={styles.cardTitle}>Quick Tips</Text>
+            <Text style={styles.cardTitle}>Did You Know?</Text>
             <Text style={styles.cardBody}>
-              Use descriptive names like "Weather App" or "Todo Tracker" so you
-              can easily find your project later.
+              You can invite collaborators after creating a project. Share ideas
+              and build together in real time.
             </Text>
           </View>
 
@@ -115,10 +122,31 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#fff',
   },
+  avatar: {
+    width: 64,
+    height: 64,
+    borderRadius: 32,
+    backgroundColor: '#eff7ff',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  avatarText: {
+    color: '#fff',
+    fontSize: 26,
+    fontWeight: '700',
+  },
   welcome: {
     fontSize: 24,
     fontWeight: '600',
-    marginBottom: 20,
+    marginBottom: 8,
+  },
+  subtitle: {
+    fontSize: 14,
+    color: '#888',
+    textAlign: 'center',
+    paddingHorizontal: 40,
+    marginBottom: 28,
   },
   openBtn: {
     backgroundColor: '#007AFF',
@@ -183,11 +211,15 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '600',
   },
+  hint: {
+    fontSize: 12,
+    color: '#bbb',
+    marginTop: 14,
+  },
   footerText: {
     fontSize: 12,
     color: '#aaa',
     textAlign: 'center',
     marginVertical: 16,
-    
   },
 });

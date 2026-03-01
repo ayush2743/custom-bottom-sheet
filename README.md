@@ -1,50 +1,21 @@
-# Welcome to your Expo app 👋
+# Custom BottomSheet
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+A lightweight, custom bottom sheet built with `react-native-reanimated` and `react-native-gesture-handler`.
 
-## Get started
+## Why not @gorhom/bottom-sheet?
 
-1. Install dependencies
+`@gorhom/bottom-sheet` has known bugs on Android when the keyboard opens — the sheet jumps, mispositions, or leaves gaps between itself and the keyboard. These issues are especially noticeable on Android devices with edge-to-edge mode or varying `softwareKeyboardLayoutMode` settings. This custom implementation gives full control over keyboard handling across both platforms.
 
-   ```bash
-   npm install
-   ```
+## How it works
 
-2. Start the app
+- The sheet is absolutely positioned at `bottom: 0` and slides up/down using a `translateY` shared value animated with `react-native-reanimated`.
+- A pan gesture (via `react-native-gesture-handler`) lets users swipe down to dismiss.
+- Tapping the backdrop also closes the sheet.
+- Controlled imperatively via a ref (`open()` / `close()`).
 
-   ```bash
-   npx expo start
-   ```
+## Keyboard handling
 
-In the output, you'll find options to open the app in a
+When a `TextInput` inside the sheet is focused:
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
-```
-
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+- **iOS:** The keyboard overlays the screen without resizing. The sheet listens to `keyboardWillShow` and translates itself up by the keyboard height.
+- **Android (`adjustResize`):** The window shrinks automatically when the keyboard appears. The sheet detects this using `useWindowDimensions` — if the window height shrunk significantly (>50px less than the screen height), the system already handled it and no manual offset is applied. If the window did **not** shrink (device doesn't support `adjustResize`), the sheet falls back to a manual `translateY` offset, same as iOS.
